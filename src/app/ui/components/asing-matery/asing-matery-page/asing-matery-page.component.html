@@ -1,0 +1,95 @@
+<div class="col-12 md:col-12">
+    <div class="flex">
+
+<div class="col-6 md:col-6">
+    <div class="card p-fluid"> 
+        <div class="field">
+            <label htmlFor="state">Docente: {{nameUser}}</label>
+        </div>       
+        <div class="field">
+            <label htmlFor="state">Seleccionar un curso</label>
+            <p-dropdown [options]="dataList" optionLabel="nombre" (onChange)="onChangeCurso($event)"></p-dropdown>
+        </div>
+    </div>
+</div>
+
+<div class="col-6 md:col-6">
+    <div class="card p-fluid">        
+        <div class="field">
+            <label htmlFor="state">Seleccionar Materias</label>
+            <div class="flex justify-content-center">
+                <div class="flex flex-column gap-2">
+                    <div *ngFor="let model of dataListSub" class="field-checkbox">
+                        <p-checkbox 
+                            [(ngModel)]="selectedCategories"
+                            [label]="model.nombre"
+                            name="group"
+                            [value]="model.id" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-content-center flex-wrap gap-3 mb-4">
+            <p-button icon="pi pi-check" [rounded]="true" [text]="true" [raised]="true" (onClick)="btnEnvPostRequest()" />
+            <p-button icon="pi pi-search" [rounded]="true" [text]="true" [raised]="true" severity="info" (onClick)="envConsultaCatalogo(true)" />
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div class="col-12 md:col-12">
+    <div class="card">
+        <div class="field">
+            <p-button label="Mostrar Todos" [raised]="true" severity="help" size="small" icon="pi pi-search" (onClick)="envConsultaCatalogo(false)"/>
+        </div>
+        <p-table #dt dataKey="id"
+            styleClass="p-datatable-gridlines" 
+            responsiveLayout="scroll"
+            [value]="dataListMatDocent"     
+            [rows]="5"
+            [rowHover]="true"
+            [paginator]="true" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [globalFilterFields]="['usuario', 'curso', 'materia','estado']" 
+            [rowsPerPageOptions]="[10,20,30]" 
+            [showCurrentPageReport]="true"            
+            currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} entradas.">
+
+            <ng-template pTemplate="caption">
+                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="util.onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Acción</th>
+                    <th>Docente</th>
+                    <th>Curso</th>                       
+                    <th>Materia</th>
+                    <th>Estado</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-model>
+                <tr>
+                    <td class="text-center">
+                        <p-button icon="pi pi-times" [rounded]="true" [text]="true" [raised]="true" severity="danger" (onClick)="btnEnvDeleteRequest(model.id)" />
+                    </td>
+                    <td>{{ model.usuario }}</td>
+                    <td>{{ model.curso }}</td>                        
+                    <td>{{ model.materia }}</td>
+                    <td class="text-center">
+                        <span [class]="'customer-badge status-' + model.estado"> {{ model.estado === 'A' ? 'Activo' : 'Eliminado' }} </span>
+                    </td>                        
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+

@@ -1,0 +1,16 @@
+{
+  "hosting": {
+    "public": "dist/web-gestion-escolar-ia/browser",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

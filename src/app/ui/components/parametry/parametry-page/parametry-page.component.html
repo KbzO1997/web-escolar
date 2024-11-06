@@ -1,0 +1,63 @@
+<div class="col-6 md:col-6">
+    <div class="card p-fluid">        
+        <div class="field">
+            <label htmlFor="state">Ingresar cursos o materias</label>
+            <p-dropdown [options]="dataList" optionLabel="nombre" (onChange)="onChangeSelect($event)"></p-dropdown>
+        </div>
+        <div class="field">
+            <input type="text" pInputText placeholder="Descripción" [(ngModel)]="model.nombre" (keypress)="util.textStringNumber($event)"/>
+        </div>        
+        <div class="flex justify-content-center flex-wrap gap-3 mb-4">
+            <p-button icon="pi pi-check" [rounded]="true" [text]="true" [raised]="true" (onClick)="btnEnvPostRequest()" />
+            <p-button icon="pi pi-search" [rounded]="true" [text]="true" [raised]="true" severity="info" (onClick)="envConsultMateryCourse()" />
+        </div>
+    </div>
+</div>
+
+<div class="col-12 md:col-12">
+    <div class="card">
+        <p-table #dt dataKey="id"
+            styleClass="p-datatable-gridlines" 
+            responsiveLayout="scroll"
+            [value]="data"     
+            [rows]="5"
+            [rowHover]="true"
+            [paginator]="true" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [globalFilterFields]="['nombre','estado']" 
+            [rowsPerPageOptions]="[10,20,30]" 
+            [showCurrentPageReport]="true"            
+            currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} entradas.">
+
+            <ng-template pTemplate="caption">
+                <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                    <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="util.onGlobalFilter(dt, $event)" placeholder="Buscar..."  class="w-full sm:w-auto"/>
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Acción</th>
+                    <th>Curso o Materia</th>
+                    <th>Estado</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-model>
+                <tr>
+                    <td class="text-center">
+                        <p-button icon="pi pi-times" [rounded]="true" [text]="true" [raised]="true" severity="danger" (onClick)="btnEnvDeleteRequest(model.id)" />
+                    </td>
+                    <td>{{model.nombre}}</td>
+                    <td class="text-center">
+                        <span [class]="'customer-badge status-' + model.estado"> {{ model.estado === 'A' ? 'Activo' : 'Eliminado' }} </span>
+                    </td>                        
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
